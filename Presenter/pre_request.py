@@ -83,19 +83,24 @@ def pre_task_delete_all():
     return result
 
 def pre_task_delete_id(id):
+    del_result = db_query.db_task_delete_id(id)
 
-    try:
-        db_query.db_task_delete_id(id)
-        commit()
-
-    except:
-        result = JSONResponse(status_code=400, content={"message":"400 Validation Failure"})
+    if del_result == 0:
+        result = JSONResponse(status_code=400, content={"message":"404 Data NOt Found"})
 
     else:
-        result = JSONResponse(status_code=200, content={"message":" 200 OK"})
 
-    finally:
-        close()
+        try:
+            commit()
+
+        except:
+            result = JSONResponse(status_code=400, content={"message":"400 Validation Failure"})
+
+        else:
+            result = JSONResponse(status_code=200, content={"message":" 200 OK"})
+
+        finally:
+            close()
 
     return result
 
