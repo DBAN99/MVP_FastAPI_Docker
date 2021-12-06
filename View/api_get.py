@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
 from Model import db_class, db_conn
 from Presenter import pre_request
 
