@@ -45,7 +45,7 @@ def db_task_patch(id, edit):
 # DELETE /task
 def db_task_delete_all():
     result = session.query(task).delete()
-    print(result)
+
     return result
 
 # DELETE /task/{id}
