@@ -23,6 +23,7 @@ def pre_task_get_all():
             result = JSONResponse(status_code=404,content={"message":"404 Data Not Found "})
     finally:
         close()
+
     return result
 
 def pre_task_get_id(id):
@@ -35,6 +36,7 @@ def pre_task_get_id(id):
     else:
         if result == []:
             result = JSONResponse(status_code=404,content={"message":"404 Data Not Found "})
+
     finally:
         close()
 
@@ -48,10 +50,10 @@ def pre_task_post(data):
         result = JSONResponse(status_code=400, content={"message": "400 Bad Request "})
 
     else:
-
         try:
             db_query.db_task_post(data)
             commit()
+
         except:
             result = JSONResponse(status_code=400, content={"message": "400 Bad Request"})
 
