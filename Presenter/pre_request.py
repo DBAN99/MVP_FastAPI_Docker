@@ -30,7 +30,7 @@ def pre_task_get_id(id):
         result = db_query.db_task_get_id(id)
 
     except:
-        result = JSONResponse(status_code=400, content={"message":" 400 Validation Failure"})
+        result = JSONResponse(status_code=400, content={"message":" 400 Bad Request"})
 
     else:
         if result == []:
@@ -45,7 +45,7 @@ def pre_task_get_id(id):
 def pre_task_post(data):
 
     if data.name == "" or type(data.completed) != bool:
-        result = JSONResponse(status_code=404, content={"message": "404 Data field Not Found "})
+        result = JSONResponse(status_code=400, content={"message": "400 Bad Request "})
 
     else:
 
@@ -53,7 +53,7 @@ def pre_task_post(data):
             db_query.db_task_post(data)
             commit()
         except:
-            result = JSONResponse(status_code=400, content={"message": "400 Validation Failure"})
+            result = JSONResponse(status_code=400, content={"message": "400 Bad Request"})
 
         else:
             result = JSONResponse(status_code=200, content={"message": "200 OK"})
@@ -66,19 +66,23 @@ def pre_task_post(data):
 # ---------------------- DELETE ----------------------
 
 def pre_task_delete_all():
+    del_result =db_query.db_task_delete_all()
 
-    try:
-        db_query.db_task_delete_all()
-        commit()
-
-    except:
-        result = JSONResponse(status_code=400, content={"message":"400 Validation Failure"})
+    if del_result == 0:
+        result = JSONResponse(status_code=404, content={"message": "404 Data Not Found"})
 
     else:
-        result = JSONResponse(status_code=200, content={"message":"200 OK"})
+        try:
+            commit()
 
-    finally:
-        close()
+        except:
+            result = JSONResponse(status_code=400, content={"message": "400 Bad Request"})
+
+        else:
+            result = JSONResponse(status_code=200, content={"message": " 200 OK"})
+
+        finally:
+            close()
 
     return result
 
@@ -86,7 +90,7 @@ def pre_task_delete_id(id):
     del_result = db_query.db_task_delete_id(id)
 
     if del_result == 0:
-        result = JSONResponse(status_code=400, content={"message":"404 Data NOt Found"})
+        result = JSONResponse(status_code=404, content={"message":"404 Data Not Found"})
 
     else:
 
@@ -94,7 +98,7 @@ def pre_task_delete_id(id):
             commit()
 
         except:
-            result = JSONResponse(status_code=400, content={"message":"400 Validation Failure"})
+            result = JSONResponse(status_code=400, content={"message":"400 Bad Request"})
 
         else:
             result = JSONResponse(status_code=200, content={"message":" 200 OK"})
@@ -108,17 +112,23 @@ def pre_task_delete_id(id):
 
 def pre_task_patch(id,edit):
 
-    try:
-        db_query.db_task_patch(id,edit)
-        commit()
+    patch_result = db_query.db_task_patch(id,edit)
 
-    except:
-        result = JSONResponse(status_code=400, content={"message":"400 Validation Failure"})
+    if patch_result == 0:
+        result = JSONResponse(status_code=404, content={"message": "404 Data Not Found"})
 
     else:
-        result = JSONResponse(status_code=200, content={"message":"200 OK "})
 
-    finally:
-        close()
+        try:
+            commit()
+
+        except:
+            result = JSONResponse(status_code=400, content={"message": "400 Bad Request"})
+
+        else:
+            result = JSONResponse(status_code=200, content={"message": " 200 OK"})
+
+        finally:
+            close()
 
     return result
